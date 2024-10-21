@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const WeatherRoutes = require('./routes/WeatherRoutes');
 dotenv.config();
+const WeatherRoutes = require('./routes/WeatherRoutes');
+
 
 const app = express();
 app.use(cors());
