@@ -7,7 +7,13 @@ dotenv.config();
 const WeatherRoutes = require('./routes/WeatherRoutes');
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Your frontend URL
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -22,4 +28,6 @@ app.use('/api', WeatherRoutes);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
