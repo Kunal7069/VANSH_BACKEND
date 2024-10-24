@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 const WeatherRoutes = require('./routes/WeatherRoutes');
 
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,16 +19,7 @@ app.get('/', (req, res) => {
   res.send('Backend is activated');
 });
 app.use('/api', WeatherRoutes);
-async function periodicAPICall() {
-    try {
-        // Example API call, modify as needed
-        const response = await fetch('https://vansh-backend.onrender.com'); // Replace with your API
-        const data = await response.json();
-        console.log('Periodic API call data:', data);
-    } catch (error) {
-        console.error('Error during periodic API call:', error);
-    }
-}
-setInterval(periodicAPICall, 10000);
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -15,7 +15,11 @@ const rolledDataSchema = new mongoose.Schema({
   min_temp : Number,
   max_temp: Number,
   temp : Number,
-  count: Number
+  count: Number,
+  dominant_weather : {
+    type: Map,  
+    of: Number
+  }
 });
 
 module.exports = mongoose.model('RolledData', rolledDataSchema);

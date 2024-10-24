@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 async function collectWeatherData(city) {
-   
+   console.log("CITY",city);
     const weatherData = await getWeather(city);
     console.log("DATA",weatherData)
     const min_temp= weatherData['main']['temp_min']
@@ -45,7 +45,20 @@ async function collectWeatherData(city) {
     
 }
 
-
+async function SearchRolledData(city){
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+  const day = String(today.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+  const weatherData = await getWeather(city);
+  console.log(weatherData)
+  console.log(city)
+  console.log(formattedDate)
+  const rolledDataEntry = await RolledData.findOne({ city: city, date: formattedDate });
+  console.log("MATCHED",rolledDataEntry);
+  return rolledDataEntry
+}
 async function RolledWeatherData(city){
   const today = new Date();
   const year = today.getFullYear();
@@ -60,6 +73,10 @@ async function RolledWeatherData(city){
   console.log("MATCHED",rolledDataEntry);
   var updated_temp = ((rolledDataEntry['temp']*rolledDataEntry['count'])+weatherData['main']['temp'])/(rolledDataEntry['count']+1);
   var updated_count=rolledDataEntry['count']+1;
+  var updated_dominant_weather= rolledDataEntry['dominant_weather'].get(weatherData['weather'][0]['main'])+1;
+  
+  console.log("updated_dominant_weather",updated_dominant_weather)
+
   if(rolledDataEntry['min_temp']>weatherData['main']['temp_min']){
     var updated_min_temp=weatherData['main']['temp_min'];
   }
@@ -77,6 +94,12 @@ async function RolledWeatherData(city){
     rolledDataEntry.max_temp = updated_max_temp; // Keep the highest max_temp
     rolledDataEntry.count =updated_count; // Increment the count
     rolledDataEntry.temp = updated_temp;
+    const weatherKey = weatherData['weather'][0]['main'];
+    if (!rolledDataEntry.dominant_weather || !(rolledDataEntry.dominant_weather instanceof Map)) {
+        rolledDataEntry.dominant_weather = new Map();
+    }
+    rolledDataEntry.dominant_weather.set(weatherKey, updated_dominant_weather);
+
   }
   await rolledDataEntry.save();
   console.log('Data entry updated:', rolledDataEntry);
@@ -87,13 +110,15 @@ async function CreateRolledData(){
   const min_temp=10000
   const max_temp=-10000
   const temp=0
-  const count =0
+  const count =0 
+  const dominant_weather = {'Clear':0,'Clouds':0,'Haze':0,'Rain':0,'Drizzle':0,'Thunderstorm':0,'Snow':0,'Mist':0,'Fog':0,'Smoke':0,'Dust':0,'Sand':0,'Ash':0,'Squall':0,'Tornado':0}
   const newRolledData = new RolledData({
     city,
     min_temp,
     max_temp,
     temp,
-    count
+    count,
+    dominant_weather
   });
   await newRolledData.save();
   console.log("DATA SAVED")
@@ -125,6 +150,12 @@ router.post('/save', (req, res) => {
 router.post('/live_search', async (req, res) => {
     const {city} = req.body;
     const weatherData = await getWeather(city);
+    res.status(201).json({weatherData}) 
+  });
+
+  router.post('/aggregate', async (req, res) => {
+    const {city} = req.body;
+    const weatherData = await SearchRolledData(city);
     res.status(201).json({weatherData}) 
   });
 
