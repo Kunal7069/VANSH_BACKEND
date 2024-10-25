@@ -106,22 +106,26 @@ async function RolledWeatherData(city){
 } 
 
 async function CreateRolledData(){
-  const city= 'Delhi'
-  const min_temp=10000
-  const max_temp=-10000
-  const temp=0
-  const count =0 
-  const dominant_weather = {'Clear':0,'Clouds':0,'Haze':0,'Rain':0,'Drizzle':0,'Thunderstorm':0,'Snow':0,'Mist':0,'Fog':0,'Smoke':0,'Dust':0,'Sand':0,'Ash':0,'Squall':0,'Tornado':0}
-  const newRolledData = new RolledData({
-    city,
-    min_temp,
-    max_temp,
-    temp,
-    count,
-    dominant_weather
-  });
-  await newRolledData.save();
-  console.log("DATA SAVED")
+  const cities= ['Delhi','Hyderabad','Bangalore','Kolkata','Chennai','Mumbai'];
+  for (const city of cities) {
+    console.log(city)
+    const min_temp=10000
+    const max_temp=-10000
+    const temp=0
+    const count =0 
+    const dominant_weather = {'Clear':0,'Clouds':0,'Haze':0,'Rain':0,'Drizzle':0,'Thunderstorm':0,'Snow':0,'Mist':0,'Fog':0,'Smoke':0,'Dust':0,'Sand':0,'Ash':0,'Squall':0,'Tornado':0}
+    const newRolledData = new RolledData({
+      city,
+      min_temp,
+      max_temp,
+      temp,
+      count,
+      dominant_weather
+    });
+    await newRolledData.save();
+    console.log("DATA SAVED")
+  }
+  
 } 
 
 
@@ -134,11 +138,14 @@ router.get('/start_rolled_data', async (req, res) => {
   CreateRolledData()
   res.status(201).json({message: 'ROLLED DATA STARTED SUCCESFULLY'}) 
 });
-router.post('/update_rolled_data', async (req, res) => {
-  const {city} = req.body;
-  await collectWeatherData(city)
-  await RolledWeatherData(city)
-  res.status(201).json({message: 'ROLLED DATA UPDATED SUCCESFULLY'}) 
+router.get('/update_rolled_data', async (req, res) => {
+  const cities= ['Delhi','Hyderabad','Bangalore','Kolkata','Chennai','Mumbai'];
+  for (const city of cities) {
+    await collectWeatherData(city)
+    await RolledWeatherData(city)
+  }
+  
+  res.send('ROLLED DATA UPDATED SUCCESFULLY');
 });
 
 router.post('/save', (req, res) => {
