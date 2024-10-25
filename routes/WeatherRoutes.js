@@ -61,8 +61,8 @@ async function RolledWeatherData(city){
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
-  const day = String(today.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day+1}`;
+  const day = String(today.getDate()+1).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
   const weatherData = await getWeather(city);
   console.log(city)
   console.log(formattedDate)
