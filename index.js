@@ -37,29 +37,29 @@ async function periodicAPICall() {
 }
 setInterval(periodicAPICall, 30000); 
 
-// async function periodicAPICall2() {
-//   try {
-//       // Example API call, modify as needed
-//       const response = await fetch('http://127.0.0.1:5000/api/update_rolled_data'); // Replace with your API
-//       const data = await response.json();
-//       console.log('Periodic API call data:', data);
-//   } catch (error) {
-//       console.error('Error during periodic API call:', error);
-//   }
-// }
-// setInterval(periodicAPICall2, 5000); 
+async function periodicAPICall2() {
+  try {
+      // Example API call, modify as needed
+      const response = await fetch('https://vansh-weather-app.onrender.com/api/update_rolled_data'); // Replace with your API
+      const data = await response.json();
+      console.log('Periodic API call data:', data);
+  } catch (error) {
+      console.error('Error during periodic API call:', error);
+  }
+}
+setInterval(periodicAPICall2, 300000); 
 
-// async function periodicAPICall3() {
-//   try {
-//       // Example API call, modify as needed
-//       const response = await fetch('https://vansh-weather-app.onrender.com/api/start_rolled_data'); // Replace with your API
-//       const data = await response.json();
-//       console.log('Periodic API call data 24 hrs:', data);
-//   } catch (error) {
-//       console.error('Error during periodic API call:', error);
-//   }
-// }
-// setInterval(periodicAPICall3, 86400000); 
+async function periodicAPICall3() {
+  try {
+      // Example API call, modify as needed
+      const response = await fetch('https://vansh-weather-app.onrender.com/api/start_rolled_data'); // Replace with your API
+      const data = await response.json();
+      console.log('Periodic API call data 24 hrs:', data);
+  } catch (error) {
+      console.error('Error during periodic API call:', error);
+  }
+}
+setInterval(periodicAPICall3, 86400000); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
