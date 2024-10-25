@@ -35,7 +35,7 @@ async function periodicAPICall() {
       console.error('Error during periodic API call:', error);
   }
 }
-setInterval(periodicAPICall, 10000); 
+setInterval(periodicAPICall, 30000); 
 
 // async function periodicAPICall2() {
 //   try {
