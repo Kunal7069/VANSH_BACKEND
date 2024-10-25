@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log("MongoDB connected"))
   .catch(err => console.log(err));
 app.get('/', (req, res) => {
-  res.send('Backend is activated');
+  res.json({ status: "WEATHER APP BACKEND IS RUNNING" });
 });
 app.use('/api', WeatherRoutes);
 async function periodicAPICall() {
